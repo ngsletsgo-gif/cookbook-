@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delicious Recipes Cookbook</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f9f5f0;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(to right, #ff8a00, #da1b60);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .tagline {
+            font-style: italic;
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .intro {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        
+        .categories {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+        
+        .category-btn {
+            padding: 0.8rem 1.5rem;
+            background-color: #fff;
+            border: 2px solid #ff8a00;
+            border-radius: 30px;
+            color: #ff8a00;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .category-btn:hover, .category-btn.active {
+            background-color: #ff8a00;
+            color: white;
+        }
+        
+        .recipe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .recipe-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .recipe-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0,0,0,0.15);
+        }
+        
+        .recipe-img {
+            height: 200px;
+            background-color: #f1d6ab;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #888;
+            font-style: italic;
+        }
+        
+        .recipe-content {
+            padding: 1.5rem;
+        }
+        
+        .recipe-title {
+            font-size: 1.4rem;
+            margin-bottom: 0.8rem;
+            color: #333;
+        }
+        
+        .recipe-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: #777;
+        }
+        
+        .recipe-description {
+            margin-bottom: 1.2rem;
+            color: #555;
+        }
+        
+        .view-recipe {
+            display: inline-block;
+            padding: 0.6rem 1.2rem;
+            background-color: #ff8a00;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        
+        .view-recipe:hover {
+            background-color: #e67a00;
+        }
+        
+        .recipe-detail {
+            display: none;
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .recipe-detail.active {
+            display: block;
+        }
+        
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            padding: 0.5rem 1rem;
+            background-color: #f1f1f1;
+            color: #333;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .detail-header {
+            margin-bottom: 2rem;
+        }
+        
+        .detail-title {
+            font-size: 2.2rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .detail-meta {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #777;
+        }
+        
+        .detail-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .detail-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .ingredients, .instructions {
+            margin-bottom: 1.5rem;
+        }
+        
+        h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: #ff8a00;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #f1d6ab;
+        }
+        
+        ul, ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        li {
+            margin-bottom: 0.5rem;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background-color: #333;
+            color: white;
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Delicious Recipes</h1>
+        <p class="tagline">15 hand-picked recipes for every occasion</p>
+    </header>
+    
+    <div class="container">
+        <div class="intro">
+            <h2>Welcome to Our Cookbook</h2>
+            <p>Discover a collection of 15 delicious recipes from around the world. Whether you're a beginner or an experienced chef, you'll find something to delight your taste buds!</p>
+        </div>
+        
+        <div class="categories">
+            <button class="category-btn active">All Recipes</button>
+            <button class="category-btn">Breakfast</button>
+            <button class="category-btn">Lunch</button>
+            <button class="category-btn">Dinner</button>
+            <button class="category-btn">Desserts</button>
+        </div>
+        
+        <div class="recipe-grid">
+            <!-- Recipe 1 -->
+            <div class="recipe-card">
+                <div class="recipe-img">Image Placeholder</div>
+                <div class="recipe-content">
+                    <h3 class="recipe-title">Classic Pancakes</h3>
+                    <div class="recipe-meta">
+                        <span>Prep: 10 mins</span>
+                        <span>Cook: 15 mins</span>
+                    </div>
+                    <p class="recipe-description">Fluffy homemade pancakes perfect for a weekend breakfast. Serve with maple syrup and fresh berries.</p>
+                    <a href="#" class="view-recipe">View Recipe</a>
+                </div>
+            </div>
+            
+            <!-- Recipe 2 -->
+            <div class="recipe-card">
+                <div class="recipe-img">Image Placeholder</div>
+                <div class="recipe-content">
+                    <h3 class="recipe-title">Spaghetti Carbonara</h3>
+                    <div class="recipe-meta">
+                        <span>Prep: 15 mins</span>
+                        <span>Cook: 20 mins</span>
+                    </div>
+                    <p class="recipe-description">Creamy Italian pasta dish with eggs, cheese, pancetta, and black pepper. A classic Roman recipe.</p>
+                    <a href="#" class="view-recipe">View Recipe</a>
+                </div>
+            </div>
+            
+            <!-- Recipe 3 -->
+            <div class="recipe-card">
+                <div class="recipe-img">Image Placeholder</div>
+                <div class="recipe-content">
+                    <h3 class="recipe-title">Chocolate Chip Cookies</h3>
+                    <div class="recipe-meta">
+                        <span>Prep: 15 mins</span>
+                        <span>Cook: 12 mins</span>
+                    </div>
+                    <p class="recipe-description">The ultimate chocolate chip cookies - crispy edges with soft, chewy centers and melted chocolate chunks.</p>
+                    <a href="#" class="view-recipe">View Recipe</a>
+                </div>
+            </div>
+            
+            <!-- Recipe 4 -->
+            <div class="recipe-card">
+                <div class="recipe-img">Image Placeholder</div>
+                <div class="recipe-content">
+                    <h3 class="recipe-title">Chicken Curry</h3>
+                    <div class="recipe-meta">
+                        <span>Prep: 20 mins</span>
+                        <span>Cook: 40 mins</span>
+                    </div>
+                    <p class="recipe-description">Fragrant and flavorful chicken curry with aromatic spices and creamy coconut milk. Serve with rice or naan.</p>
+                    <a href="#" class="view-recipe">View Recipe</a>
+                </div>
+            </div>
+            
+            <!-- Recipe 5 -->
+            <div class="recipe-card">
+                <div class="recipe-img">Image Placeholder</div>
+                <div class="recipe-content">
+                    <h3 class="recipe-title">Caesar Salad</h3>
+                    <div class="recipe-meta">
+                        <span>Prep: 15 mins</span>
+                        <span>Cook: 0 mins</span>
+                    </div>
+                    <p class="recipe-description">Crisp romaine lettuce with homemade Caesar dressing, croutons, and parmesan cheese. A classic salad.</p>
+                    <a href="#" class="view-recipe">View Recipe</a>
+                </div>
+            </div>
+            
+            <!-- Recipe 6 -->
+            <div class="recipe-card">
+                <div class="recipe-img">Image Placeholder</div>
+                <div class="recipe-content">
+                    <h3 class="recipe-title">Beef Tacos</h3>
+                    <div class="recipe-meta">
+                        <span>Prep: 20 mins</span>
+                        <span>Cook: 15 mins</span>
+                    </div>
+                    <p class="recipe-description">Seasoned ground beef in crispy taco shells topped with lettuce, tomato, cheese, and sour cream.</p>
+                    <a href="#" class="view-recipe">View Recipe</a>
+                </div>
+            </div>
+            
+            <!-- Recipe 7 -->
+            <div class="recipe-card">
+                <div class="recipe-img">Image Placeholder</div>
+                <div class="recipe-content">
+                    <h3 class="recipe-title">Vegetable Stir Fry</h3>
+                    <div class="recipe-meta">
+                        <span>Prep: 15 mins</span>
+                        <span>Cook: 10 mins</span>
+                    </div>
+                    <p class="recipe-description">Colorful vegetables stir-fried in a savory sauce. Quick, healthy, and perfect for busy weeknights.</p>
+                    <a href="#" class="view-recipe">View Recipe</a>
+                </div>
+            </div>
+            
+            <!-- Recipe 8 -->
+            <div class="recipe-card">
+                <div class="recipe-img">Image Placeholder</div>
+                <div class="recipe-content">
+                    <h3 class="recipe-title">French Toast</h3>
+                    <div class="recipe-meta">
+                        <span>Prep: 10 mins</span>
+                        <span>Cook: 15 mins</span>
+                    </div>
+                    <p class="recipe-description">Thick slices of bread dipped in a cinnamon egg mixture and pan-fried to golden perfection.</p>
+                    <a href="#" class="view-recipe">View Recipe</a>
+                </div>
+            </div>
+            
+            <!-- Recipe 9 -->
+            <div class="recipe-card">
+                <div class="recipe-img">Image Placeholder</div>
+                <div class="recipe-content">
+                    <h3 class="recipe-title">Chocolate Cake</h3>
+                    <div class="recipe-meta">
+                        <span>Prep: 20 mins</span>
+                        <span>Cook: 35 mins</span>
+                    </div>
+                    <p class="recipe-description">Rich, moist chocolate cake with creamy chocolate frosting. The ultimate dessert for chocolate lovers.</p>
+                    <a href="#" class="view-recipe">View Recipe</a>
+                </div>
+            </div>
+            
+            <!-- Recipe 10 -->
+            <div class="recipe-card">
+                <div class="recipe-img">Image Placeholder</div>
+                <div class="recipe-content">
+                    <h3 class="recipe-title">Grilled Salmon</h3>
+                    <div class="recipe-meta">
+                        <span>Prep: 10 mins</span>
+                        <span>Cook: 15 mins</span>
+                    </div>
+                    <p class="recipe-description">Perfectly grilled salmon fillets with lemon and herbs. Healthy, flavorful, and ready in under 30 minutes.</p>
+                    <a href="#" class="view-recipe">View Recipe</a>
+                </div>
+            </div>
+            
+            <!-- Recipe 11 -->
+            <div class="recipe-card">
+                <div class="recipe-img">Image Placeholder</div>
+                <div class="recipe-content">
+                    <h3 class="recipe-title">Margherita Pizza</h3>
+                    <div class="recipe-meta">
+                        <span>Prep: 25 mins</span>
+                        <span>Cook: 15 mins</span>
+                    </div>
+                    <p class="recipe-description">Classic pizza with tomato sauce, fresh mozzarella, basil, and a thin crispy crust. Simple and delicious.</p>
+                    <a href="#" class="view-recipe">View Recipe</a>
+                </div>
+            </div>
+            
+            <!-- Recipe 12 -->
+            <div class="recipe-card">
+                <div class="recipe-img">Image Placeholder</div>
+                <div class="recipe-content">
+                    <h3 class="recipe-title">Guacamole</h3>
+                    <div class="recipe-meta">
+                        <span>Prep: 15 mins</span>
+                        <span>Cook: 0 mins</span>
+                    </div>
+                    <p class="recipe-description">Creamy avocado dip with lime, cilantro, and spices. Perfect with tortilla chips or as a topping.</p>
+                    <a href="#" class="view-recipe">View Recipe</a>
+                </div>
+            </div>
+            
+            <!-- Recipe 13 -->
+            <div class="recipe-card">
+                <div class="recipe-img">Image Placeholder</div>
+                <div class="recipe-content">
+                    <h3 class="recipe-title">Beef Burger</h3>
+                    <div class="recipe-meta">
+                        <span>Prep: 15 mins</span>
+                        <span>Cook: 10 mins</span>
+                    </div>
+                    <p class="recipe-description">Juicy homemade beef burgers with your choice of toppings. Better than any restaurant burger!</p>
+                    <a href="#" class="view-recipe">View Recipe</a>
+                </div>
+            </div>
+            
+            <!-- Recipe 14 -->
+            <div class="recipe-card">
+                <div class="recipe-img">Image Placeholder</div>
+                <div class="recipe-content">
+                    <h3 class="recipe-title">Fruit Smoothie</h3>
+                    <div class="recipe-meta">
+                        <span>Prep: 5 mins</span>
+                        <span>Cook: 0 mins</span>
+                    </div>
+                    <p class="recipe-description">Refreshing blended drink with mixed berries, banana, yogurt, and honey. Perfect healthy breakfast or snack.</p>
+                    <a href="#" class="view-recipe">View Recipe</a>
+                </div>
+            </div>
+            
+            <!-- Recipe 15 -->
+            <div class="recipe-card">
+                <div class="recipe-img">Image Placeholder</div>
+                <div class="recipe-content">
+                    <h3 class="recipe-title">Lasagna</h3>
+                    <div class="recipe-meta">
+                        <span>Prep: 30 mins</span>
+                        <span>Cook: 45 mins</span>
+                    </div>
+                    <p class="recipe-description">Layers of pasta, rich meat sauce, creamy béchamel, and melted cheese. The ultimate comfort food.</p>
+                    <a href="#" class="view-recipe">View Recipe</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recipe Detail View -->
+        <div class="recipe-detail">
+            <a href="#" class="back-btn">&larr; Back to all recipes</a>
+            
+            <div class="detail-header">
+                <h2 class="detail-title">Classic Pancakes</h2>
+                <div class="detail-meta">
+                    <span>Prep Time: 10 minutes</span>
+                    <span>Cook Time: 15 minutes</span>
+                    <span>Servings: 4</span>
+                </div>
+            </div>
+            
+            <div class="detail-content">
+                <div class="ingredients">
+                    <h3>Ingredients</h3>
+                    <ul>
+                        <li>1 cup all-purpose flour</li>
+                        <li>2 tablespoons sugar</li>
+                        <li>2 teaspoons baking powder</li>
+                        <li>1/2 teaspoon salt</li>
+                        <li>1 cup milk</li>
+                        <li>1 large egg</li>
+                        <li>2 tablespoons melted butter</li>
+                        <li>1 teaspoon vanilla extract</li>
+                        <li>Butter or oil for cooking</li>
+                    </ul>
+                </div>
+                
+                <div class="instructions">
+                    <h3>Instructions</h3>
+                    <ol>
+                        <li>In a large bowl, whisk together the flour, sugar, baking powder, and salt.</li>
+                        <li>In another bowl, beat the egg, then add in the milk, melted butter, and vanilla.</li>
+                        <li>Pour the wet ingredients into the dry ingredients and stir until just combined. It's okay if there are a few lumps.</li>
+                        <li>Heat a non-stick skillet or griddle over medium heat and add a small amount of butter or oil.</li>
+                        <li>Pour 1/4 cup of batter onto the skillet for each pancake.</li>
+                        <li>Cook until bubbles form on the surface, then flip and cook until golden brown on the other side.</li>
+                        <li>Repeat with the remaining batter, adding more butter or oil as needed.</li>
+                        <li>Serve warm with maple syrup and your favorite toppings.</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2023 Delicious Recipes Cookbook | All Rights Reserved</p>
+    </footer>
+
+    <script>
+        // Simple functionality for demonstration
+        document.querySelectorAll('.view-recipe').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector('.recipe-detail').classList.add('active');
+                window.scrollTo({ top: document.querySelector('.recipe-detail').offsetTop - 20, behavior: 'smooth' });
+            });
+        });
+        
+        document.querySelector('.back-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelector('.recipe-detail').classList.remove('active');
+        });
+        
+        document.querySelectorAll('.category-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
